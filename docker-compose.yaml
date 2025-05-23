@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: db
     env_file: .env
     restart: always
@@ -20,6 +20,8 @@ services:
       - "${PGADMIN_PORT}:80"
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - db
 
   web:
     build:
@@ -61,11 +63,15 @@ services:
     container_name: ensys-backend
     env_file: .env
     restart: always
+    ports:
+      - "8001:8001"
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
      - ${LOCAL_DATADIR}:/app/data/simulations
     networks:
       - backend
+    depends_on:
+      - db
 
   proxy:
     build: ./proxy
