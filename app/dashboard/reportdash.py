@@ -21,7 +21,7 @@ def createDashboard(simulation: Simulation):
 
     try:
         wpath = os.path.join(os.getcwd(), "dumps", simulation.mvs_token, "dumps")
-        print(wpath)
+        # print(wpath)
 
         es = solph.EnergySystem()
         es.restore(dpath=wpath, filename="config.dump")
@@ -82,7 +82,7 @@ def createDashboard(simulation: Simulation):
 
         export_preis = 30
         strom_preis = round(strom_variable_costs / strom_input, 0)
-        print("Strompreis:", strom_preis)
+        # print("Strompreis:", strom_preis)
 
         strom_kosten = round(strom_variable_costs, 2)
         strom_kosten_o_EE = round(strom_preis * strom_last, 2)
@@ -273,7 +273,7 @@ def createDashboard(simulation: Simulation):
             for t, g in solph.views.node(es.results["main"], node=bus)["sequences"].items():
                 idx_asset = abs(t[0].index(bus) - 1)
                 time_series = np.nan_to_num(g.values[:8760]) * pow(-1, idx_asset)
-                print(time_series)
+                # print(time_series)
 
                 if idx_asset > 0:
                     graph_data[str(t[0][1])] = time_series.astype(float)
@@ -427,7 +427,7 @@ def createDashboard(simulation: Simulation):
             )
         )
 
-        print(bus_graph)
+        # print(bus_graph)
         dashboard_childs.append(
             html.Div(
                 style={
