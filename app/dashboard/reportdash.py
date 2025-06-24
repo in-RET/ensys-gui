@@ -33,61 +33,61 @@ def createDashboard(simulation: Simulation):
         es = None
 
     if es is not None:
-        investment_data = cost_calculation_from_energysystem(es)
-
+        # investment_data = cost_calculation_from_energysystem(es)
+        #
         busses = []
         bus_figures = []
-
-        investment_elements = []
-        cost_elements = []
-        cost_elements_2 = []
-        cost_elements_3 = []
-        emissions_elements = []
-
-        results = es.results["main"]
-
-        flows = [x for x in results.keys() if x[1] is not None]
-        nodes = [x for x in results.keys() if x[1] is None]
-
-        for flow in [x for x in flows if hasattr(results[x]["scalars"], "invest") and isinstance(x[1], solph.Bus)]:
-            if type(flow[0]) is not solph.components.GenericStorage:
-                UNIT = ("MW", "kW")
-            else:
-                UNIT = ("MWh", "kWh")
-
-            investment_elements.append(
-                html.Tr(
-                    style={"background": "white"},
-                    children=[
-                        html.Td(style={"width": "75%"}, children=flow[0].label),
-                        html.Td(
-                            style={"text-align": "right"},
-                            children=str("{:.4f}".format(round(results[flow]["scalars"]["invest"], 4))) + " " + UNIT[0] + " (" + str("{:.4f}".format(round(results[flow]["scalars"]["invest"] * 1000, 4))) + " " + UNIT[1] + ")",
-                        ),
-                    ],
-                )
-            )
-
-        battery_power = solph.views.node(results, "Strombus")["scalars"][(("Batteriespeicher", "Strombus"), "invest")]
-        invest_battery = round(battery_power * 43646.22240281003, 2)
-
-        invest_pv = round(investment_data["investment costs"]["(Photovoltaik, Strombus)"], 2)
-
-        emission_factor = 0.380
-
-        strom_input = round(solph.views.node(results, "Strombus")["sequences"][(("Netzanbieter", "Strombus"), "flow")].sum(), 2)
-        strom_variable_costs = round(investment_data["variable costs"]["(Netzanbieter, Strombus)"], 2)
-        strom_last = round(solph.views.node(results, "Strombus")["sequences"][(("Strombus", "Stromverbrauch"), "flow")].sum(), 2)
-        strom_export = round(solph.views.node(results, "Strombus")["sequences"][(("Strombus", "Export"), "flow")].sum(), 2)
-
-        export_preis = 30
-        strom_preis = round(strom_variable_costs / strom_input, 0)
-        # print("Strompreis:", strom_preis)
-
-        strom_kosten = round(strom_variable_costs, 2)
-        strom_kosten_o_EE = round(strom_preis * strom_last, 2)
-        strom_einnahmen = round(export_preis * strom_export, 2)
-
+        #
+        # investment_elements = []
+        # cost_elements = []
+        # cost_elements_2 = []
+        # cost_elements_3 = []
+        # emissions_elements = []
+        #
+        # results = es.results["main"]
+        #
+        # flows = [x for x in results.keys() if x[1] is not None]
+        # nodes = [x for x in results.keys() if x[1] is None]
+        #
+        # for flow in [x for x in flows if hasattr(results[x]["scalars"], "invest") and isinstance(x[1], solph.Bus)]:
+        #     if type(flow[0]) is not solph.components.GenericStorage:
+        #         UNIT = ("MW", "kW")
+        #     else:
+        #         UNIT = ("MWh", "kWh")
+        #
+        #     investment_elements.append(
+        #         html.Tr(
+        #             style={"background": "white"},
+        #             children=[
+        #                 html.Td(style={"width": "75%"}, children=flow[0].label),
+        #                 html.Td(
+        #                     style={"text-align": "right"},
+        #                     children=str("{:.4f}".format(round(results[flow]["scalars"]["invest"], 4))) + " " + UNIT[0] + " (" + str("{:.4f}".format(round(results[flow]["scalars"]["invest"] * 1000, 4))) + " " + UNIT[1] + ")",
+        #                 ),
+        #             ],
+        #         )
+        #     )
+        #
+        # battery_power = solph.views.node(results, "Strombus")["scalars"][(("Batteriespeicher", "Strombus"), "invest")]
+        # invest_battery = round(battery_power * 43646.22240281003, 2)
+        #
+        # invest_pv = round(investment_data["investment costs"]["(Photovoltaik, Strombus)"], 2)
+        #
+        # emission_factor = 0.380
+        #
+        # strom_input = round(solph.views.node(results, "Strombus")["sequences"][(("Netzanbieter", "Strombus"), "flow")].sum(), 2)
+        # strom_variable_costs = round(investment_data["variable costs"]["(Netzanbieter, Strombus)"], 2)
+        # strom_last = round(solph.views.node(results, "Strombus")["sequences"][(("Strombus", "Stromverbrauch"), "flow")].sum(), 2)
+        # strom_export = round(solph.views.node(results, "Strombus")["sequences"][(("Strombus", "Export"), "flow")].sum(), 2)
+        #
+        # export_preis = 30
+        # strom_preis = round(strom_variable_costs / strom_input, 0)
+        # # print("Strompreis:", strom_preis)
+        #
+        # strom_kosten = round(strom_variable_costs, 2)
+        # strom_kosten_o_EE = round(strom_preis * strom_last, 2)
+        # strom_einnahmen = round(export_preis * strom_export, 2)
+        #
         # cost_elements.append(
         #     html.Tr(
         #         style={"background": "white"},
@@ -310,22 +310,22 @@ def createDashboard(simulation: Simulation):
             "padding": "0.5em",
         }
 
-        if len(investment_elements) > 0:
-            # print(investment_elements)
-            dashboard_childs.append(
-                html.Div(
-                    children=[
-                        html.H2(
-                            children="Static values", style={"textAlign": "center"}
-                        ),
-                        html.H3(children="Installed Power", style={"textAlign": "center"}),
-                        html.Table(
-                            style=style_dict,
-                            children=investment_elements
-                        )
-                    ]
-                )
-            )
+        # if len(investment_elements) > 0:
+        #     # print(investment_elements)
+        #     dashboard_childs.append(
+        #         html.Div(
+        #             children=[
+        #                 html.H2(
+        #                     children="Static values", style={"textAlign": "center"}
+        #                 ),
+        #                 html.H3(children="Installed Power", style={"textAlign": "center"}),
+        #                 html.Table(
+        #                     style=style_dict,
+        #                     children=investment_elements
+        #                 )
+        #             ]
+        #         )
+        #     )
 
         # if len(cost_elements) > 0:
         #     dashboard_childs.append(
