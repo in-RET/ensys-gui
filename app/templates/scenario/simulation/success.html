@@ -7,90 +7,99 @@
 {% block progression_content %}
 
     <main class="simulation simulation--successful">
-      <div>
-        <div class="simulation__heading" aria-hidden="true">
-        </div>
-        <div class="simulation__content">
-          <h2>{% translate "Simulation successful" %}</h2>
-          <div class="simulation__id">
-            <!-- <a href="/app/working/{{ mvs_token }}">{{ mvs_token }}</a> -->
-            <h4><b>{{mvs_token}}</b></h4>
-          </div>
-          <div class="simulation__feedback">
-            <div class="item item--successful">
-              <p>{% translate "Your simulation is complete." %}</p>
+        <div>
+            <div class="simulation__heading" aria-hidden="true">
             </div>
-            <div class="item item--warning">
+            <div class="simulation__content">
+                <h2>{% translate "Simulation successful" %}</h2>
+                <div class="simulation__id">
+                    <!-- <a href="/app/working/{{ mvs_token }}">{{ mvs_token }}</a> -->
+                    <h4><b>{{ mvs_token }}</b></h4>
+                </div>
+                <div class="simulation__feedback">
+                    <div class="item item--successful">
+                        <p>{% translate "Your simulation is complete." %}</p>
+                    </div>
+                    <div class="item item--warning">
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </main>
 
 {% endblock progression_content %}
 
 {% block footer %}
-  <footer class="simulation-footer">
-    <div>
-      <!--<a class="btn btn--medium" href="{% url 'scenario_visualize_results' scen_id %}">{% translate "Check results dashboard" %}</a>-->
-      <!-- href="{% url 'simulation_cancel' scen_id %}" -->
-      <a class="btn btn--medium btn--hollow btn--previous" href="{% url 'scenario_steps_edit' proj_id scen_id step_id|add:'-1' %}" aria-disabled="true">{% translate "Previous" %}</a>
-      <button class="btn btn--medium btn--hollow" type="submit" onclick="confirmCancel()">{% translate "Rerun simulation" %}</button>
-      <a class="btn btn--medium btn--hollow" href="/static/working/{{ mvs_token }}/dumps/config.lp" download>{% translate "Download LP files" %}</a>
-      <a class="btn btn--medium" href="{% url 'scenario_results' proj_id scen_id %}" id="next_btn"  >{% translate "Next" %} </a>
-    </div>
-  </footer>
+    <footer class="simulation-footer">
+        <div>
+            <!--<a class="btn btn--medium" href="{% url 'scenario_visualize_results' scen_id %}">{% translate "Check results dashboard" %}</a>-->
+            <!-- href="{% url 'simulation_cancel' scen_id %}" -->
+            <a class="btn btn--medium btn--hollow btn--previous"
+               href="{% url 'scenario_steps_edit' proj_id scen_id step_id|add:'-1' %}"
+               aria-disabled="true">{% translate "Previous" %}</a>
+            <button class="btn btn--medium btn--hollow" type="submit"
+                    onclick="confirmCancel()">{% translate "Rerun simulation" %}</button>
+            <a class="btn btn--medium btn--hollow" href="/dumps/{{ mvs_token }}/dumps/config.dump" download
+               id="config.dump">{% translate "Download dumpfile" %}</a>
+            <a class="btn btn--medium btn--hollow" href="/dumps/{{ mvs_token  }}/dumps/config.lp" download
+               id="config.lp">{% translate "Download lp-file" %}</a>
+            <a class="btn btn--medium" href="{% url 'scenario_results' proj_id scen_id %}"
+               id="next_btn">{% translate "Next" %} </a>
+        </div>
+    </footer>
 
-  <script>
-    function confirmCancel() {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This will delete the Simulation data and re-run the Process",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
-          console.log(result.isConfirmed);
-          if (result.isConfirmed) {
-            $.ajax({
-              headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-              type: "GET",
-              url: "{% url 'simulation_cancel' scen_id %}",
-              success: 
-                function (resp) {
-                  console.log("sucessfully reseted.");
-                  $.ajax({
-                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-                    type: "POST",
-                    url: "{% url 'request_mvs_simulation' scen_id %}",
-                    success: function(resp) {
-                      window.location.reload()
-                    },                      
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                      Swal.fire({        
-                        title: "Failure",
-                        text: textStatus,
-                        icon: "warning",
-                        showCancelButton: false,
-                        confirmButtonText: "Yes",
-                      })
-                    }
-                  })
-                },
-          
-              error: function (XMLHttpRequest, textStatus, errorThrown) {
-                Swal.fire({        
-                  title: "Failure",
-                  text: textStatus,
-                  icon: "warning",
-                  showCancelButton: false,
-                  confirmButtonText: "Yes",
-                });
-              }
+    <script>
+        function confirmCancel() {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This will delete the Simulation data and re-run the Process",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                console.log(result.isConfirmed);
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                        type: "GET",
+                        url: "{% url 'simulation_cancel' scen_id %}",
+                        success:
+                            function (resp) {
+                                console.log("sucessfully reseted.");
+                                $.ajax({
+                                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                                    type: "POST",
+                                    url: "{% url 'request_mvs_simulation' scen_id %}",
+                                    success: function (resp) {
+                                        window.location.reload()
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        Swal.fire({
+                                            title: "Failure",
+                                            text: textStatus,
+                                            icon: "warning",
+                                            showCancelButton: false,
+                                            confirmButtonText: "Yes",
+                                        })
+                                    }
+                                })
+                            },
+
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            Swal.fire({
+                                title: "Failure",
+                                text: textStatus,
+                                icon: "warning",
+                                showCancelButton: false,
+                                confirmButtonText: "Yes",
+                            });
+                        }
+                    })
+                } else {
+                    // do nothing
+                }
             })
-          } else {
-            // do nothing
-          }})};
-  </script>
+        };
+    </script>
 {% endblock footer %}
