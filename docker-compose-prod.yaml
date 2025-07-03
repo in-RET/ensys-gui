@@ -40,6 +40,7 @@ services:
         - web
     volumes:
         - static_volume:/static
+        - ${LOCAL_DATADIR}:/static/dumps
     networks:
         - backend
         - frontend
