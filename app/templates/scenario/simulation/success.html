@@ -39,9 +39,9 @@
                aria-disabled="true">{% translate "Previous" %}</a>
             <button class="btn btn--medium btn--hollow" type="submit"
                     onclick="confirmCancel()">{% translate "Rerun simulation" %}</button>
-            <a class="btn btn--medium btn--hollow" href="file:///static/dumps/{{ mvs_token }}/dumps/config.dump" download
+            <a class="btn btn--medium btn--hollow" href="/static/dumps/{{ mvs_token }}/dumps/config.dump" download
                id="config.dump">{% translate "Download dumpfile" %}</a>
-            <a class="btn btn--medium btn--hollow" href="file:///static/dumps/{{ mvs_token  }}/dumps/config.lp" download
+            <a class="btn btn--medium btn--hollow" href="/static/dumps/{{ mvs_token }}/dumps/config.lp" download
                id="config.lp">{% translate "Download lp-file" %}</a>
             <a class="btn btn--medium" href="{% url 'scenario_results' proj_id scen_id %}"
                id="next_btn">{% translate "Next" %} </a>
